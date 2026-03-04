@@ -1,0 +1,114 @@
+html, body {
+    height: auto !important;
+    min-height: 100%;
+    overflow-y: auto !important; 
+    overflow-x: hidden;
+    background-color: #313338; 
+    color: #dbdee1;
+    scroll-behavior: smooth;
+}
+#landing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+}
+.hidden { display: none !important; }
+.input-box { 
+    background-color: #383a40; 
+    border: none; 
+    outline: none; 
+    color: white; 
+    font-size: 1.15rem; 
+}
+#chat-container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 56rem; 
+    padding-top: 5rem;
+}
+#messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 150px;
+}
+.user-msg { 
+    background: #404249; 
+    align-self: flex-end; 
+    border-radius: 15px 15px 0 15px; 
+    padding: 1.25rem; 
+    color: white; 
+    max-width: 80%; 
+    font-size: 1.15rem; 
+    line-height: 1.6;
+}
+.ai-msg { 
+    background: #2b2d31; 
+    border-radius: 0 15px 15px 15px; 
+    padding: 1.25rem; 
+    width: fit-content; 
+    max-width: 90%; 
+    font-size: 1.15rem; 
+    line-height: 1.6;
+}
+.markdown-body {
+    font-size: 1.15rem !important;
+}
+pre {
+    position: relative;
+    background: #1e1e1e !important;
+    border-radius: 12px;
+    padding: 2.5rem 1rem 1rem;
+    margin: 1rem 0;
+    white-space: pre-wrap;      
+    word-wrap: break-word;      
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    font-size: 1rem;
+}
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: #ccc;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 11px;
+}
+.dot-flashing {
+    position: relative; width: 7px; height: 7px; border-radius: 5px;
+    background-color: #b5bac1; color: #b5bac1;
+    animation: dot-flashing 0.5s infinite linear alternate;
+    animation-delay: .25s; margin: 0 15px;
+}
+.dot-flashing::before, .dot-flashing::after {
+    content: ''; display: inline-block; position: absolute; top: 0;
+    width: 7px; height: 7px; border-radius: 5px;
+    background-color: #b5bac1; color: #b5bac1;
+    animation: dot-flashing 0.5s infinite linear alternate;
+}
+.dot-flashing::before { left: -12px; animation-delay: 0s; }
+.dot-flashing::after { left: 12px; animation-delay: 0.5s; }
+@keyframes dot-flashing { 0% { background-color: #b5bac1; } 50%, 100% { background-color: #4e5058; } }
+#share-corner { position: fixed; bottom: 100px; left: 20px; z-index: 100; display: none; }
+.ai-msg a, .markdown-body a {
+    color: #00bfff !important; 
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+.ai-msg a:hover, .markdown-body a:hover {
+    color: #87cefa !important; 
+}
+#top-logo {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 100;
+    transition: transform 0.2s ease;
+}
+#top-logo:hover { transform: scale(1.05); }

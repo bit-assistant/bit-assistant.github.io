@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="p-4">
+
+    <a href="/" id="top-logo">
+        <img src="logo.png" alt="Logo" class="w-12 h-12 md:w-16 md:h-16 object-contain drop-shadow-lg">
+    </a>
+
+    <div id="landing">
+        <div class="w-full max-w-2xl px-4 text-center">
+            <img id="model-img" src="model1.png" class="mx-auto mb-6 w-32 h-32 rounded-full shadow-lg object-cover">
+            <input type="text" id="user-input" placeholder="Ask me anything..." 
+                   class="input-box w-full p-6 rounded-xl text-lg shadow-2xl focus:ring-2 focus:ring-indigo-500 mb-4">
+            <select id="model-select" onchange="updateImage()" class="input-box p-2 rounded cursor-pointer mx-auto block">
+                <option value="model1.png">Aiko</option>
+                <option value="model2.png">Martin</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="chat-container" class="hidden">
+        <div id="messages"></div>
+    </div>
+
+    <div id="bottom-bar" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-[#313338]">
+        <div class="max-w-4xl mx-auto">
+            <input type="text" id="sticky-input" placeholder="Type a message..." class="input-box w-full p-4 rounded-lg shadow-xl">
+        </div>
+    </div>
+
+    <div id="share-corner">
+        <button id="share-link" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-all">
+            <span>SHARE CONVERSATION</span>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
