@@ -77,21 +77,33 @@ shareBtn.onclick = shareConversation;
 window.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const shareId = urlParams.get('id');
+    
     if (shareId) {
         try {
+            // Point this to your BACKEND IP/Domain
             const response = await fetch(`https://94.140.114.86/qwe123e1/shares/${shareId}.json`);
+            
+            if (!response.ok) throw new Error("File not found");
+            
             const data = await response.json();
+            
+            // data.html contains the actual chat bubbles
             if (data.html) {
                 currentUuid = data.uuid;
                 landing.classList.add('hidden');
                 chatContainer.classList.remove('hidden');
                 bottomBar.classList.remove('hidden');
+                
                 messages.innerHTML = data.html;
+                
+                // Re-attach buttons to the loaded code blocks
                 attachCopyButtons(messages);
                 shareCorner.style.display = 'block';
                 setTimeout(scrollToEnd, 200);
             }
-        } catch (e) { console.error("Load failed", e); }
+        } catch (e) { 
+            console.error("Shared chat load failed:", e); 
+        }
     }
 });
 
