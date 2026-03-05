@@ -6,19 +6,19 @@
     <title>AI Assistant</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/xkVGZhdc/logo.pngg">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/xkVGZhdc/logo.png">
     <link rel="stylesheet" href="style.css">
-    <meta property="og:title" content="AI  Assistant" />
+    <meta property="og:title" content="AI Assistant" />
     <meta property="og:description" content="Your Personal AI Assistant" />
     <meta property="og:image" content="https://i.postimg.cc/xkVGZhdc/logo.png" />
     <meta property="og:url" content="https://bit-assistant.github.io/" />
     <meta name="theme-color" content="#313338">
 </head>
 <body class="p-4">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2552532280828601"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2552532280828601" crossorigin="anonymous"></script>
+    
     <a href="/" id="top-logo">
-        <img src="https://i.postimg.cc/xkVGZhdc/logo.png/logo.png" alt="Logo" class="w-12 h-12 md:w-16 md:h-16 object-contain drop-shadow-lg">
+        <img src="https://i.postimg.cc/xkVGZhdc/logo.png" alt="Logo" class="w-12 h-12 md:w-16 md:h-16 object-contain drop-shadow-lg">
     </a>
 
     <div id="landing">
@@ -28,7 +28,7 @@
                    class="input-box w-full p-6 rounded-xl text-lg shadow-2xl focus:ring-2 focus:ring-indigo-500 mb-4">
             <select id="model-select" onchange="updateImage()" class="input-box p-2 rounded cursor-pointer mx-auto block">
                 <option value="https://i.postimg.cc/gXYVzhRt/model1.png">Aiko</option>
-                <option value="https://i.postimg.cc/ZBT8bN3f/model2.pngg">Martin</option>
+                <option value="https://i.postimg.cc/ZBT8bN3f/model2.png">Martin</option>
             </select>
         </div>
     </div>
@@ -43,12 +43,18 @@
         </div>
     </div>
 
-    <div id="share-corner">
-        <button id="share-link" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-all">
-            <span>SHARE CONVERSATION</span>
-        </button>
+    <div id="sidebar-container" class="hidden">
+        <div class="ad-wrapper hidden md:block">
+            <iframe style="background-color: white;" width="160" height="600" scrolling="no" frameborder="0" allowtransparency="true" marginheight="0" marginwidth="0" name="spot_id_10002797" src="//a.adtng.com/get/10002797?ata=testacc22"></iframe>
+        </div>
+        
+        <div id="share-corner">
+            <button id="share-link" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-all">
+                <span>SHARE CONVERSATION</span>
+            </button>
+        </div>
     </div>
-<iframe style="background-color: white;" width="160" height="600" scrolling="no" frameborder="0" allowtransparency="true" marginheight="0" marginwidth="0" name="spot_id_10002797" src="//a.adtng.com/get/10002797?ata=testacc22"></iframe>
+
     <script src="script.js"></script>
 </body>
 </html>
