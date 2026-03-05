@@ -23,6 +23,32 @@ html, body {
     color: white; 
     font-size: 1.15rem; 
 }
+#sidebar-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+    z-index: 50;
+}
+.ad-wrapper {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+@media (min-width: 1024px) {
+    #messages {
+        padding-right: 200px; 
+        max-width: calc(100% - 180px);
+    }
+}
+body {
+    background-color: #313338;
+    color: white;
+}
 #chat-container {
     margin: 0 auto;
     width: 100%;
