@@ -136,3 +136,17 @@ pre {
     75% { transform: scale(1.8) translate(2px, 2px); }
     100% { transform: scale(1.8) translate(-2px, -2px); }
 }
+.markdown-body a {
+    color: #00a8fc !important;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.markdown-body a:hover {
+    text-decoration: underline;
+}
+
+.markdown-body {
+    font-size: 1.15rem !important;
+    word-break: break-word;
+}
