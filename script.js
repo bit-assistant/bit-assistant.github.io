@@ -46,7 +46,7 @@ async function sendMessage(text) {
     landing.classList.add('hidden');
     chatContainer.classList.remove('hidden');
     bottomBar.classList.remove('hidden');
-    sidebarContainer.classList.remove('hidden'); 
+    // sidebarContainer is already shown on page load now
     
     stickyInput.focus();
     
@@ -88,7 +88,6 @@ async function sendMessage(text) {
                     ? 'https://i.postimg.cc/QVyJZ0N7/model1-f.png' 
                     : 'https://i.postimg.cc/Z0MxzVYj/model2-f.png';
 
-                // Clear any existing timer to prevent premature reset
                 if (furiousTimer) clearTimeout(furiousTimer);
 
                 avatar.src = furiousImg;
