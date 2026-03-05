@@ -10,7 +10,7 @@ const stickyInput = document.getElementById('sticky-input');
 
 let currentUuid = null;
 let isGenerating = false;
-let furiousTimer = null; // Variable to store the timeout
+let furiousTimer = null;
 
 function updateImage() { 
     document.getElementById('model-img').src = modelSelect.value; 
@@ -46,7 +46,6 @@ async function sendMessage(text) {
     landing.classList.add('hidden');
     chatContainer.classList.remove('hidden');
     bottomBar.classList.remove('hidden');
-    // sidebarContainer is already shown on page load now
     
     stickyInput.focus();
     
@@ -81,15 +80,14 @@ async function sendMessage(text) {
         if (data.response) {
             let cleanResponse = data.response;
 
+            // Furious State Logic
             if (cleanResponse.includes('[F]')) {
                 cleanResponse = cleanResponse.replace('[F]', '').trim();
-                
                 const furiousImg = selectedModel.includes('model1') 
                     ? 'https://i.postimg.cc/QVyJZ0N7/model1-f.png' 
                     : 'https://i.postimg.cc/Z0MxzVYj/model2-f.png';
 
                 if (furiousTimer) clearTimeout(furiousTimer);
-
                 avatar.src = furiousImg;
                 avatar.classList.add('furious-mode');
                 
@@ -117,9 +115,12 @@ stickyInput.onkeypress = (e) => { if (e.key === 'Enter') { if(isGenerating) retu
 shareBtn.onclick = shareConversation;
 
 window.addEventListener('DOMContentLoaded', async () => {
+    sidebarContainer.classList.remove('hidden'); 
     userInput.focus();
+
     const urlParams = new URLSearchParams(window.location.search);
     const shareId = urlParams.get('id');
+    
     if (shareId) {
         try {
             const response = await fetch(`https://bit-assistant.webhop.me/qwe123e1/shares/${shareId}.json`);
@@ -129,7 +130,6 @@ window.addEventListener('DOMContentLoaded', async () => {
                 landing.classList.add('hidden');
                 chatContainer.classList.remove('hidden');
                 bottomBar.classList.remove('hidden');
-                sidebarContainer.classList.remove('hidden'); 
                 messages.innerHTML = data.html;
                 attachCopyButtons(messages);
                 stickyInput.focus();
