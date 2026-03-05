@@ -43,9 +43,16 @@
         </div>
     </div>
     <div id="sidebar-container" class="hidden">
-        <div class="ad-wrapper hidden md:block">
-            <iframe style="background-color: white;" width="160" height="600" scrolling="no" frameborder="0" allowtransparency="true" marginheight="0" marginwidth="0" name="spot_id_10002797" src="//a.adtng.com/get/10002797?ata=testacc22"></iframe>
-        </div>
+        <div class="ad-wrapper relative"> <button onclick="this.parentElement.style.display='none'" 
+                    class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm shadow-lg hover:bg-red-500 z-[100000]">
+                &times;
+            </button>
+
+            <div id="frame" style="width: 100%;margin: auto;position: relative; z-index: 99998;">
+                <iframe data-aa='2429553' src='//acceptable.a-ads.com/2429553/?size=Adaptive'
+                        style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+            </div>
+            </div>
         
         <div id="share-corner-new">
             <button id="share-link" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-all">
