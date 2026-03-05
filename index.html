@@ -42,17 +42,13 @@
             <input type="text" id="sticky-input" placeholder="Type a message..." class="input-box w-full p-4 rounded-lg shadow-xl">
         </div>
     </div>
-    <div id="sidebar-container" class="hidden">
-        <div class="ad-wrapper relative"> <button onclick="this.parentElement.style.display='none'" 
-                    class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm shadow-lg hover:bg-red-500 z-[100000]">
-                &times;
-            </button>
-
-            <div id="frame" style="width: 100%;margin: auto;position: relative; z-index: 99998;">
+    <div id="sidebar-container" class="hidden"> <div class="ad-wrapper">
+            <div class="ad-close-btn" onclick="this.parentElement.style.display='none'">&times;</div>
+            <div id="frame" style="width: 100%; margin: auto; position: relative; z-index: 99998;">
                 <iframe data-aa='2429553' src='//acceptable.a-ads.com/2429553/?size=Adaptive'
-                        style='border:0; padding:0; width:70%; height:auto; overflow:hidden;display: block;margin: auto'></iframe>
+                        style='border:0; padding:0; width:160px; height:600px; overflow:hidden; display: block; margin: auto'></iframe>
             </div>
-            </div>
+        </div>
         
         <div id="share-corner-new">
             <button id="share-link" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-all">
