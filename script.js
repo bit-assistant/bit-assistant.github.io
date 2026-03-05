@@ -47,6 +47,8 @@ async function sendMessage(text) {
     chatContainer.classList.remove('hidden');
     bottomBar.classList.remove('hidden');
     
+    document.getElementById('share-corner-new').classList.remove('hidden');
+    
     stickyInput.focus();
     
     messages.innerHTML += `<div class="user-msg">${text}</div>`;
@@ -115,7 +117,7 @@ stickyInput.onkeypress = (e) => { if (e.key === 'Enter') { if(isGenerating) retu
 shareBtn.onclick = shareConversation;
 
 window.addEventListener('DOMContentLoaded', async () => {
-    sidebarContainer.classList.remove('hidden'); 
+    sidebarContainer.classList.remove('hidden'); // Show sidebar immediately
     userInput.focus();
 
     const urlParams = new URLSearchParams(window.location.search);
