@@ -7,6 +7,7 @@ html, body {
     color: #dbdee1;
     scroll-behavior: smooth;
 }
+
 #landing {
     display: flex;
     flex-direction: column;
@@ -15,7 +16,9 @@ html, body {
     min-height: 100vh;
     width: 100%;
 }
+
 .hidden { display: none !important; }
+
 .input-box { 
     background-color: #383a40; 
     border: none; 
@@ -23,18 +26,21 @@ html, body {
     color: white; 
     font-size: 1.15rem; 
 }
+
 #chat-container {
     margin: 0 auto;
     width: 100%;
     max-width: 56rem; 
     padding-top: 5rem;
 }
+
 #messages {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     padding-bottom: 150px;
 }
+
 .user-msg { 
     background: #404249; 
     align-self: flex-end; 
@@ -45,6 +51,7 @@ html, body {
     font-size: 1.15rem; 
     line-height: 1.6;
 }
+
 .ai-msg { 
     background: #2b2d31; 
     border-radius: 0 15px 15px 15px; 
@@ -54,9 +61,7 @@ html, body {
     font-size: 1.15rem; 
     line-height: 1.6;
 }
-.markdown-body {
-    font-size: 1.15rem !important;
-}
+
 pre {
     position: relative;
     background: #1e1e1e !important;
@@ -68,6 +73,7 @@ pre {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     font-size: 1rem;
 }
+
 .copy-btn {
     position: absolute;
     top: 8px;
@@ -80,6 +86,8 @@ pre {
     cursor: pointer;
     font-size: 11px;
 }
+
+/* Animations */
 .dot-flashing {
     position: relative; width: 7px; height: 7px; border-radius: 5px;
     background-color: #b5bac1; color: #b5bac1;
@@ -96,6 +104,7 @@ pre {
 .dot-flashing::after { left: 12px; animation-delay: 0.5s; }
 @keyframes dot-flashing { 0% { background-color: #b5bac1; } 50%, 100% { background-color: #4e5058; } }
 
+/* Sidebar & Ads */
 #sidebar-container { 
     position: fixed; 
     bottom: 100px; 
@@ -104,34 +113,46 @@ pre {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    align-items: flex-start;
-    max-width: 200px; 
 }
-.ad-wrapper {
-    position: relative; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+#right-ad-container {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 180px;
+}
+
+.ad-wrapper, .ad-wrapper-transparent {
+    position: relative;
+    background-color: #313338; 
     border-radius: 8px;
-    background: white;
     padding: 5px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05); 
 }
-.ad-close-btn {
+
+.ad-close-btn, #right-ad-container button {
     position: absolute;
-    top: -10px;
-    right: -10px;
     background: #ef4444;
     color: white;
-    border-radius: 9999px;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
     cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-size: 16px;
+    line-height: 1;
     z-index: 1001;
 }
-}
+
+#sidebar-container .ad-close-btn { top: -10px; right: -10px; }
+#right-ad-container button { top: -10px; left: -10px; }
+
 #top-logo {
     position: fixed;
     top: 1.5rem;
@@ -156,6 +177,12 @@ pre {
     75% { transform: scale(1.8) translate(2px, 2px); }
     100% { transform: scale(1.8) translate(-2px, -2px); }
 }
+
+.markdown-body {
+    font-size: 1.15rem !important;
+    word-break: break-word;
+}
+
 .markdown-body a {
     color: #00a8fc !important;
     text-decoration: none;
@@ -164,9 +191,4 @@ pre {
 
 .markdown-body a:hover {
     text-decoration: underline;
-}
-
-.markdown-body {
-    font-size: 1.15rem !important;
-    word-break: break-word;
 }
