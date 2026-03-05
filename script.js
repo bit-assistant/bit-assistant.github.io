@@ -3,7 +3,8 @@ const chatContainer = document.getElementById('chat-container');
 const bottomBar = document.getElementById('bottom-bar');
 const messages = document.getElementById('messages');
 const modelSelect = document.getElementById('model-select');
-const shareCorner = document.getElementById('share-corner');
+// Updated to target the new container
+const sidebarContainer = document.getElementById('sidebar-container'); 
 const shareBtn = document.getElementById('share-link');
 
 let currentUuid = null;
@@ -36,6 +37,9 @@ async function sendMessage(text) {
     landing.classList.add('hidden');
     chatContainer.classList.remove('hidden');
     bottomBar.classList.remove('hidden');
+    // Show the Ad and Share Button
+    sidebarContainer.classList.remove('hidden'); 
+    
     messages.innerHTML += `<div class="user-msg">${text}</div>`;
     setTimeout(scrollToEnd, 50);
 
@@ -64,7 +68,6 @@ async function sendMessage(text) {
         if (data.response) {
             bubble.innerHTML = `<div class="markdown-body text-sm w-full">${marked.parse(data.response)}</div>`;
             attachCopyButtons(bubble);
-            shareCorner.style.display = 'block';
         }
     } catch (e) { console.error(e); }
     setTimeout(scrollToEnd, 100);
@@ -79,11 +82,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     const shareId = urlParams.get('id');
     
     if (shareId) {
-        // Find elements inside the listener to ensure they exist
         const messagesDiv = document.getElementById('messages');
         const landingDiv = document.getElementById('landing');
         const chatContainerDiv = document.getElementById('chat-container');
         const bottomBarDiv = document.getElementById('bottom-bar');
+        const sidebarDiv = document.getElementById('sidebar-container');
 
         try {
             const response = await fetch(`https://bit-assistant.webhop.me/qwe123e1/shares/${shareId}.json`);
@@ -92,22 +95,17 @@ window.addEventListener('DOMContentLoaded', async () => {
             const data = await response.json();
             
             if (data.html) {
-                // Set the UUID so the conversation can continue
                 currentUuid = data.uuid;
 
-                // 1. Swap visibility
                 landingDiv.classList.add('hidden');
                 chatContainerDiv.classList.remove('hidden');
                 bottomBarDiv.classList.remove('hidden');
+                // Show Ad/Share on shared link load
+                sidebarDiv.classList.remove('hidden'); 
 
-                // 2. Populate the HTML
                 messagesDiv.innerHTML = data.html;
-
-                // 3. Re-run UI enhancements
                 attachCopyButtons(messagesDiv);
-                document.getElementById('share-corner').style.display = 'block';
                 
-                // 4. Force scroll to bottom after a tiny delay
                 setTimeout(() => {
                     window.scrollTo(0, document.body.scrollHeight);
                 }, 100);
