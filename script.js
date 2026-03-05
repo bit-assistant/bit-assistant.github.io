@@ -3,14 +3,18 @@ const chatContainer = document.getElementById('chat-container');
 const bottomBar = document.getElementById('bottom-bar');
 const messages = document.getElementById('messages');
 const modelSelect = document.getElementById('model-select');
-// Updated to target the new container
-const sidebarContainer = document.getElementById('sidebar-container'); 
+const sidebarContainer = document.getElementById('sidebar-container');
 const shareBtn = document.getElementById('share-link');
 
 let currentUuid = null;
 
-function updateImage() { document.getElementById('model-img').src = modelSelect.value; }
-function scrollToEnd() { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }
+function updateImage() { 
+    document.getElementById('model-img').src = modelSelect.value; 
+}
+
+function scrollToEnd() { 
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); 
+}
 
 function attachCopyButtons(container) {
     container.querySelectorAll('pre').forEach((block) => {
@@ -34,10 +38,10 @@ async function sendMessage(text) {
     
     const selectedModel = modelSelect.value;
 
+    // Show Chat UI
     landing.classList.add('hidden');
     chatContainer.classList.remove('hidden');
     bottomBar.classList.remove('hidden');
-    // Show the Ad and Share Button
     sidebarContainer.classList.remove('hidden'); 
     
     messages.innerHTML += `<div class="user-msg">${text}</div>`;
@@ -69,7 +73,9 @@ async function sendMessage(text) {
             bubble.innerHTML = `<div class="markdown-body text-sm w-full">${marked.parse(data.response)}</div>`;
             attachCopyButtons(bubble);
         }
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error(e); 
+    }
     setTimeout(scrollToEnd, 100);
 }
 
@@ -82,29 +88,20 @@ window.addEventListener('DOMContentLoaded', async () => {
     const shareId = urlParams.get('id');
     
     if (shareId) {
-        const messagesDiv = document.getElementById('messages');
-        const landingDiv = document.getElementById('landing');
-        const chatContainerDiv = document.getElementById('chat-container');
-        const bottomBarDiv = document.getElementById('bottom-bar');
-        const sidebarDiv = document.getElementById('sidebar-container');
-
         try {
             const response = await fetch(`https://bit-assistant.webhop.me/qwe123e1/shares/${shareId}.json`);
-            if (!response.ok) throw new Error("File not found on backend");
+            if (!response.ok) throw new Error("File not found");
             
             const data = await response.json();
-            
             if (data.html) {
                 currentUuid = data.uuid;
+                landing.classList.add('hidden');
+                chatContainer.classList.remove('hidden');
+                bottomBar.classList.remove('hidden');
+                sidebarContainer.classList.remove('hidden'); 
 
-                landingDiv.classList.add('hidden');
-                chatContainerDiv.classList.remove('hidden');
-                bottomBarDiv.classList.remove('hidden');
-                // Show Ad/Share on shared link load
-                sidebarDiv.classList.remove('hidden'); 
-
-                messagesDiv.innerHTML = data.html;
-                attachCopyButtons(messagesDiv);
+                messages.innerHTML = data.html;
+                attachCopyButtons(messages);
                 
                 setTimeout(() => {
                     window.scrollTo(0, document.body.scrollHeight);
@@ -112,7 +109,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (e) { 
             console.error("Shared chat load failed:", e);
-            alert("Could not load the shared conversation.");
         }
     }
 });
@@ -135,5 +131,7 @@ async function shareConversation() {
             shareBtn.innerText = "LINK COPIED!";
             setTimeout(() => { shareBtn.innerHTML = originalText; }, 3000);
         }
-    } catch (e) { shareBtn.innerText = "SAVE ERROR"; }
+    } catch (e) { 
+        shareBtn.innerText = "SAVE ERROR"; 
+    }
 }
