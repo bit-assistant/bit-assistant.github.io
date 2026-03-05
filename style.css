@@ -29,33 +29,6 @@ html, body {
     max-width: 56rem; 
     padding-top: 5rem;
 }
-#sidebar-container {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-    z-index: 1000;
-}
-
-.ad-wrapper {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    border-radius: 8px;
-    overflow: hidden;
-    background: white;
-}
-
-#share-corner-new {
-    display: block;
-}
-
-@media (max-height: 700px) {
-    .ad-wrapper {
-        display: none !important;
-    }
-}
 #messages {
     display: flex;
     flex-direction: column;
@@ -122,14 +95,22 @@ pre {
 .dot-flashing::before { left: -12px; animation-delay: 0s; }
 .dot-flashing::after { left: 12px; animation-delay: 0.5s; }
 @keyframes dot-flashing { 0% { background-color: #b5bac1; } 50%, 100% { background-color: #4e5058; } }
-#share-corner { position: fixed; bottom: 100px; left: 20px; z-index: 100; display: none; }
-.ai-msg a, .markdown-body a {
-    color: #00bfff !important; 
-    text-decoration: underline;
-    transition: color 0.2s ease;
+
+#sidebar-container { 
+    position: fixed; 
+    bottom: 100px; 
+    left: 20px; 
+    z-index: 1000; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
 }
-.ai-msg a:hover, .markdown-body a:hover {
-    color: #87cefa !important; 
+.ad-wrapper {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
 }
 #top-logo {
     position: fixed;
