@@ -51,7 +51,7 @@ async function sendMessage(text) {
         let formData = `prompt=${encodeURIComponent(text)}&model=${encodeURIComponent(selectedModel)}`;
         if (currentUuid) formData += `&uuid=${encodeURIComponent(currentUuid)}`;
         
-        const response = await fetch('https://94.140.114.86/qwe123e1/chat.php', {
+        const response = await fetch('https://87.196.135.149/qwe123e1/chat.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: formData
@@ -86,7 +86,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         const bottomBarDiv = document.getElementById('bottom-bar');
 
         try {
-            const response = await fetch(`https://94.140.114.86/qwe123e1/shares/${shareId}.json`);
+            const response = await fetch(`https://87.196.135.149/qwe123e1/shares/${shareId}.json`);
             if (!response.ok) throw new Error("File not found on backend");
             
             const data = await response.json();
@@ -125,7 +125,7 @@ async function shareConversation() {
     shareBtn.innerText = "SAVING...";
     const base64Html = btoa(unescape(encodeURIComponent(messages.innerHTML)));
     try {
-        const response = await fetch('https://94.140.114.86/qwe123e1/save_share.php', {
+        const response = await fetch('https://87.196.135.149/qwe123e1/save_share.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `content=${encodeURIComponent(base64Html)}&uuid=${encodeURIComponent(currentUuid)}`
