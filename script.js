@@ -79,30 +79,42 @@ window.addEventListener('DOMContentLoaded', async () => {
     const shareId = urlParams.get('id');
     
     if (shareId) {
+        // Find elements inside the listener to ensure they exist
+        const messagesDiv = document.getElementById('messages');
+        const landingDiv = document.getElementById('landing');
+        const chatContainerDiv = document.getElementById('chat-container');
+        const bottomBarDiv = document.getElementById('bottom-bar');
+
         try {
-            // Point this to your BACKEND IP/Domain
             const response = await fetch(`https://94.140.114.86/qwe123e1/shares/${shareId}.json`);
-            
-            if (!response.ok) throw new Error("File not found");
+            if (!response.ok) throw new Error("File not found on backend");
             
             const data = await response.json();
             
-            // data.html contains the actual chat bubbles
             if (data.html) {
+                // Set the UUID so the conversation can continue
                 currentUuid = data.uuid;
-                landing.classList.add('hidden');
-                chatContainer.classList.remove('hidden');
-                bottomBar.classList.remove('hidden');
+
+                // 1. Swap visibility
+                landingDiv.classList.add('hidden');
+                chatContainerDiv.classList.remove('hidden');
+                bottomBarDiv.classList.remove('hidden');
+
+                // 2. Populate the HTML
+                messagesDiv.innerHTML = data.html;
+
+                // 3. Re-run UI enhancements
+                attachCopyButtons(messagesDiv);
+                document.getElementById('share-corner').style.display = 'block';
                 
-                messages.innerHTML = data.html;
-                
-                // Re-attach buttons to the loaded code blocks
-                attachCopyButtons(messages);
-                shareCorner.style.display = 'block';
-                setTimeout(scrollToEnd, 200);
+                // 4. Force scroll to bottom after a tiny delay
+                setTimeout(() => {
+                    window.scrollTo(0, document.body.scrollHeight);
+                }, 100);
             }
         } catch (e) { 
-            console.error("Shared chat load failed:", e); 
+            console.error("Shared chat load failed:", e);
+            alert("Could not load the shared conversation.");
         }
     }
 });
