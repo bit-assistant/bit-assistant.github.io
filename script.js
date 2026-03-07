@@ -1,163 +1,89 @@
-const landing = document.getElementById('landing');
-const chatContainer = document.getElementById('chat-container');
-const bottomBar = document.getElementById('bottom-bar');
-const messages = document.getElementById('messages');
-const modelSelect = document.getElementById('model-select');
-const sidebarContainer = document.getElementById('sidebar-container');
-const shareBtn = document.getElementById('share-link');
-const userInput = document.getElementById('user-input');
-const stickyInput = document.getElementById('sticky-input');
-
-let currentUuid = null;
-let isGenerating = false;
-let furiousTimer = null;
-
-function updateImage() { 
-    document.getElementById('model-img').src = modelSelect.value; 
-}
-
-function scrollToEnd() { 
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); 
-}
-
-function attachCopyButtons(container) {
-    container.querySelectorAll('pre').forEach((block) => {
-        if (block.querySelector('.copy-btn')) return;
-        const button = document.createElement('button');
-        button.className = 'copy-btn';
-        button.innerText = 'Copy';
-        button.onclick = () => {
-            const code = block.querySelector('code').innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                button.innerText = 'Copied!';
-                setTimeout(() => button.innerText = 'Copy', 2000);
-            });
-        };
-        block.appendChild(button);
-    });
-}
-
-async function sendMessage(text) {
-    if (!text.trim() || isGenerating) return;
-    
-    isGenerating = true;
-    const selectedModel = modelSelect.value;
-
-    landing.classList.add('hidden');
-    chatContainer.classList.remove('hidden');
-    bottomBar.classList.remove('hidden');
-    
-    document.getElementById('share-corner-new').classList.remove('hidden');
-    
-    stickyInput.focus();
-    
-    messages.innerHTML += `<div class="user-msg">${text}</div>`;
-    setTimeout(scrollToEnd, 50);
-
-    const tempId = 'ai-' + Date.now();
-    messages.innerHTML += `
-        <div id="${tempId}" class="flex items-start space-x-3 w-full">
-            <img src="${selectedModel}" class="avatar-img w-10 h-10 rounded-full flex-shrink-0 shadow-md transition-all duration-300">
+const landing=document.getElementById('landing');const chatContainer=document.getElementById('chat-container');const bottomBar=document.getElementById('bottom-bar');const messages=document.getElementById('messages');const modelSelect=document.getElementById('model-select');const sidebarContainer=document.getElementById('sidebar-container');const shareBtn=document.getElementById('share-link');const userInput=document.getElementById('user-input');const stickyInput=document.getElementById('sticky-input');let currentUuid=null;let isGenerating=false;let furiousTimer=null;let isCalendarMode=false;let isNoteMode=false;let isCinemaMode=false;function toggleCinemaMode(){isCinemaMode=!isCinemaMode;if(isCinemaMode){isCalendarMode=false;isNoteMode=false;stickyInput.style.boxShadow="0 0 15px 5px rgba(34, 197, 94, 0.5)";stickyInput.style.border="3px solid #22c55e";stickyInput.placeholder="CINEMA MODE: Ask for Movies... 🍿"}else{isCinemaMode=false;stickyInput.style.boxShadow="none";stickyInput.style.border="none";stickyInput.placeholder="Type a message..."}}const cinemaBtn=document.getElementById('cinema-btn');if(cinemaBtn){cinemaBtn.onclick=(e)=>{e.stopPropagation();toggleCinemaMode();document.getElementById('tools-menu').classList.add('hidden')}}function toggleCalendarUI(){isCalendarMode=!isCalendarMode;if(isCalendarMode){isNoteMode=false;stickyInput.style.boxShadow="0 0 15px 5px rgba(255, 0, 0, 0.5)";stickyInput.style.border="3px solid red";stickyInput.placeholder="CALENDAR MODE: What should I remember?"}else{stickyInput.style.boxShadow="none";stickyInput.style.border="none";stickyInput.placeholder="Type a message..."}}function toggleNoteMode(){isNoteMode=!isNoteMode;if(isNoteMode){isCalendarMode=false;stickyInput.style.boxShadow="0 0 15px 5px rgba(161, 122, 90, 0.5)";stickyInput.style.border="3px solid #a17a5a";stickyInput.placeholder="NOTES MODE: What's on your mind?"}else{stickyInput.style.boxShadow="none";stickyInput.style.border="none";stickyInput.placeholder="Type a message..."}}function renderNotesUI(){const notes=JSON.parse(localStorage.getItem('ai_notes')||"[]");if(notes.length===0){return `<div class="text-[#a17a5a] text-xs">No notes.</div>`}let html=`<div class="notes-wrapper p-0 m-0 flex flex-col items-start w-full">`;notes.forEach((note,index)=>{html+=`
+            <div class="note-card w-fit max-w-full mb-3" style="margin-left: 0 !important;">
+                <div class="flex justify-between items-center mb-2 border-b border-[#a17a5a]/20 pb-1 gap-4">
+                    <span class="text-[9px] text-[#a17a5a] font-black tracking-widest uppercase">Note #${index+1}</span>
+                    <span class="text-[8px] text-[#a17a5a]/50 font-mono">${note.date }</span>
+                </div>
+                <div style="text-align: left;">
+                    ${note.content }
+                </div>
+            </div>`});html+=`</div>`;return html}function updateImage(){document.getElementById('model-img').src=modelSelect.value}function scrollToEnd(){setTimeout(()=>{window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})},50)}function attachCopyButtons(container){container.querySelectorAll('pre').forEach((block)=>{if(block.querySelector('.copy-btn')){return}const button=document.createElement('button');button.className='copy-btn';button.innerText='Copy';button.onclick=()=>{const code=block.querySelector('code').innerText;navigator.clipboard.writeText(code).then(()=>{button.innerText='Copied!';setTimeout(()=>button.innerText='Copy',2000)})};block.appendChild(button)})}function saveEventToLocal(aiResponse){const eventRegex=/\[EVENT\]\s+(\d{2}-\d{2}-\d{4}\s+\d{2}:\d{2}:\d{2})/;const noteRegex=/\[NOTE\]\s+(.*)/;const eventMatch=aiResponse.match(eventRegex);const noteMatch=aiResponse.match(noteRegex);if(eventMatch){const events=JSON.parse(localStorage.getItem('ai_events')||"[]");events.push({time:eventMatch[1],note:noteMatch?noteMatch[1]:"N/A",fired:false});localStorage.setItem('ai_events',JSON.stringify(events));const parts=eventMatch[1].split(' ')[0].split('-');return{day:parts[0],month:parts[1],year:parts[2]}}return null}let alarmInterval=null;setInterval(()=>{const events=JSON.parse(localStorage.getItem('ai_events')||"[]");const now=new Date();const day=String(now.getDate()).padStart(2,'0');const month=String(now.getMonth()+1).padStart(2,'0');const year=now.getFullYear();const hours=String(now.getHours()).padStart(2,'0');const minutes=String(now.getMinutes()).padStart(2,'0');const nowStrMinute=`${ day }-${ month }-${ year } ${ hours }:${ minutes }`;let changed=false;events.forEach(ev=>{const eventMinute=ev.time.substring(0,16);if(!ev.fired&&eventMinute===nowStrMinute){ev.fired=true;changed=true;const playAlarm=()=>{const audio=new Audio('sound.mp3');audio.play().catch(()=>console.log("Audio blocked by browser. Click anywhere on page."))};playAlarm();alarmInterval=setInterval(playAlarm,7000);const banner=document.createElement('div');banner.id="active-alarm-banner";banner.className="fixed top-0 left-0 w-full bg-green-600 text-white p-4 z-[999999] text-center font-bold shadow-2xl flex justify-between items-center px-10";banner.innerHTML=`
+                <span>🔔 REMINDER: ${ev.note }</span>
+                <button id="dismiss-btn" class="bg-white text-green-700 px-4 py-2 rounded shadow font-black hover:bg-gray-100 transition-colors">
+                    DISMISS
+                </button>`;document.body.prepend(banner);document.getElementById('dismiss-btn').onclick=()=>{clearInterval(alarmInterval);banner.remove();}}});if(changed){localStorage.setItem('ai_events',JSON.stringify(events))}},2000);const newsBtn=document.getElementById('news-btn');if(newsBtn){newsBtn.onclick=(e)=>{e.stopPropagation();sendMessage("Latest news updates","news");toolsMenu.classList.add('hidden')}}async function sendMessage(text,forcedTool=null){if(!text.trim()||isGenerating){return}const lowerText=text.toLowerCase().trim();if(forcedTool==="news"){isGenerating=true;landing.classList.add('hidden');chatContainer.classList.remove('hidden');const tempId='ai-'+Date.now();messages.innerHTML+=`
+            <div id="${ tempId }" class="flex items-start space-x-3 w-full">
+                <img src="${modelSelect.value }" class="avatar-img w-10 h-10 rounded-full shadow-md">
+                <div class="ai-msg flex items-center min-h-[40px]"><div class="dot-flashing"></div></div>
+            </div>`;scrollToEnd();try{let formData=`prompt=get_news&tool=news`;const response=await fetch('http://bit-assistant.webhop.me/qwe123e1/chat.php',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData});const data=await response.json();const bubble=document.getElementById(tempId).querySelector('.ai-msg');bubble.innerHTML=`<div class="markdown-body text-sm w-full">${data.response }</div>`}catch(e){console.error(e)}finally{isGenerating=false;scrollToEnd()}return;}if(lowerText==="delete all"){messages.innerHTML+=`<div class="user-msg">${ text }</div>`;let statusText="";let borderColor="border-red-500";let bgColor="bg-red-500/10";if(isNoteMode){localStorage.removeItem('ai_notes');statusText="🗑️ All notes have been wiped.";borderColor="border-[#a17a5a]";bgColor="bg-[#a17a5a]/10"}else if(isCalendarMode){localStorage.removeItem('ai_events');statusText="🗑️ All calendar data has been wiped."}else{localStorage.removeItem('ai_events');localStorage.removeItem('ai_notes');statusText="🗑️ All calendar and notes data has been wiped."}messages.innerHTML+=`
+            <div class="flex items-start space-x-3 w-full">
+                <div class="ai-msg w-full p-3 ${ bgColor } border-l-4 ${ borderColor } text-white text-xs font-bold">
+                    ${ statusText }
+                </div>
+            </div>`;scrollToEnd();return}const deleteNoteMatch=lowerText.match(/^delete\s+note\s+(\d+)$/);if(deleteNoteMatch){messages.innerHTML+=`<div class="user-msg">${ text }</div>`;const index=parseInt(deleteNoteMatch[1])-1;let notes=JSON.parse(localStorage.getItem('ai_notes')||"[]");if(notes[index]){notes.splice(index,1);localStorage.setItem('ai_notes',JSON.stringify(notes));messages.innerHTML+=`
+                <div class="flex items-start space-x-3 w-full">
+                    <div class="ai-msg w-full p-2 text-[#a17a5a] text-xs font-bold">✅ Note #${index+1} removed.</div>
+                </div>`}else{messages.innerHTML+=`
+                <div class="flex items-start space-x-3 w-full">
+                    <div class="ai-msg w-full p-2 text-red-400 text-xs italic">⚠️ Note #${index+1} not found.</div>
+                </div>`}scrollToEnd();return}const deleteMatch=lowerText.match(/^delete\s+(\d{2}-\d{2}-\d{2,4})$/);if(deleteMatch){messages.innerHTML+=`<div class="user-msg">${ text }</div>`;let targetDate=deleteMatch[1];if(targetDate.length===8){const parts=targetDate.split('-');targetDate=`${parts[0]}-${parts[1]}-20${parts[2]}`}let events=JSON.parse(localStorage.getItem('ai_events')||"[]");const initialLength=events.length;events=events.filter(e=>!e.time.startsWith(targetDate));localStorage.setItem('ai_events',JSON.stringify(events));const removedCount=initialLength-events.length;const statusMsg=removedCount>0?`✅ Deleted ${ removedCount } event(s) for ${ targetDate }.`:`⚠️ No events found for ${ targetDate }.`;messages.innerHTML+=`<div class="flex items-start space-x-3 w-full"><div class="ai-msg w-full p-3 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-xs">${ statusMsg }</div></div>`;scrollToEnd();return}if(lowerText==="show"){messages.innerHTML+=`<div class="user-msg">${ text }</div>`;const tempId='ai-'+Date.now();messages.innerHTML+=`<div id="${ tempId }" class="flex items-start w-full">
+        <div class="ai-msg"></div>
+    </div>`;const bubble=document.getElementById(tempId).querySelector('.ai-msg');if(isNoteMode){bubble.className="notes-wrapper";bubble.style.background="transparent";bubble.style.padding="0";bubble.innerHTML=renderNotesUI()}else if(isCalendarMode){bubble.className="ai-msg";bubble.style.background="";bubble.style.padding="";bubble.innerHTML=renderCalendarUI()}scrollToEnd();return}const wasInCalendarMode=isCalendarMode;const wasInNoteMode=isNoteMode;isGenerating=true;const selectedModel=modelSelect.value;landing.classList.add('hidden');chatContainer.classList.remove('hidden');bottomBar.classList.remove('hidden');document.getElementById('sidebar-container').classList.remove('hidden');document.getElementById('tools-corner').classList.remove('hidden');document.getElementById('share-corner-new').classList.remove('hidden');stickyInput.focus();messages.innerHTML+=`<div class="user-msg">${ text }</div>`;setTimeout(scrollToEnd,50);const tempId='ai-'+Date.now();messages.innerHTML+=`
+        <div id="${ tempId }" class="flex items-start space-x-3 w-full">
+            <img src="${ selectedModel }" class="avatar-img w-10 h-10 rounded-full flex-shrink-0 shadow-md transition-all duration-300">
             <div class="ai-msg flex items-center min-h-[40px]"><div class="dot-flashing"></div></div>
-        </div>`;
-    setTimeout(scrollToEnd, 50);
-
-    try {
-        let formData = `prompt=${encodeURIComponent(text)}&model=${encodeURIComponent(selectedModel)}`;
-        if (currentUuid) formData += `&uuid=${encodeURIComponent(currentUuid)}`;
-        
-        const response = await fetch('https://bit-assistant.webhop.me/qwe123e1/chat.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: formData
-        });
-        
-        const data = await response.json();
-        if (data.uuid) currentUuid = data.uuid;
-        
-        const messageRow = document.getElementById(tempId);
-        const bubble = messageRow.querySelector('.ai-msg');
-        const avatar = messageRow.querySelector('.avatar-img');
-
-        if (data.response) {
-            let cleanResponse = data.response;
-
-            // Furious State Logic
-            if (cleanResponse.includes('[F]')) {
-                cleanResponse = cleanResponse.replace('[F]', '').trim();
-                const furiousImg = selectedModel.includes('model1') 
-                    ? 'https://i.postimg.cc/QVyJZ0N7/model1-f.png' 
-                    : 'https://i.postimg.cc/Z0MxzVYj/model2-f.png';
-
-                if (furiousTimer) clearTimeout(furiousTimer);
-                avatar.src = furiousImg;
-                avatar.classList.add('furious-mode');
-                
-                furiousTimer = setTimeout(() => {
-                    avatar.src = selectedModel;
-                    avatar.classList.remove('furious-mode');
-                    furiousTimer = null;
-                }, 3000);
-            }
-
-            bubble.innerHTML = `<div class="markdown-body text-sm w-full">${marked.parse(cleanResponse)}</div>`;
-            attachCopyButtons(bubble);
-        }
-    } catch (e) { 
-        console.error(e); 
-    } finally {
-        isGenerating = false;
-        stickyInput.focus();
-        setTimeout(scrollToEnd, 100);
-    }
-}
-
-userInput.onkeypress = (e) => { if (e.key === 'Enter') { if(isGenerating) return; sendMessage(e.target.value); e.target.value = ''; } };
-stickyInput.onkeypress = (e) => { if (e.key === 'Enter') { if(isGenerating) return; sendMessage(e.target.value); e.target.value = ''; } };
-shareBtn.onclick = shareConversation;
-
-window.addEventListener('DOMContentLoaded', async () => {
-    sidebarContainer.classList.remove('hidden'); // Show sidebar immediately
-    userInput.focus();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const shareId = urlParams.get('id');
-    
-    if (shareId) {
-        try {
-            const response = await fetch(`https://bit-assistant.webhop.me/qwe123e1/shares/${shareId}.json`);
-            const data = await response.json();
-            if (data.html) {
-                currentUuid = data.uuid;
-                landing.classList.add('hidden');
-                chatContainer.classList.remove('hidden');
-                bottomBar.classList.remove('hidden');
-                messages.innerHTML = data.html;
-                attachCopyButtons(messages);
-                stickyInput.focus();
-                setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100);
-            }
-        } catch (e) { console.error(e); }
-    }
-});
-
-async function shareConversation() {
-    if (!messages.innerHTML.trim()) return;
-    const originalText = shareBtn.innerHTML;
-    shareBtn.innerText = "SAVING...";
-    const base64Html = btoa(unescape(encodeURIComponent(messages.innerHTML)));
-    try {
-        const response = await fetch('https://bit-assistant.webhop.me/qwe123e1/save_share.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `content=${encodeURIComponent(base64Html)}&uuid=${encodeURIComponent(currentUuid)}`
-        });
-        const data = await response.json();
-        if (data.url) {
-            const fullUrl = window.location.origin + window.location.pathname + "?id=" + data.url;
-            await navigator.clipboard.writeText(fullUrl);
-            shareBtn.innerText = "LINK COPIED!";
-            setTimeout(() => { shareBtn.innerHTML = originalText; }, 3000);
-        }
-    } catch (e) { shareBtn.innerText = "SAVE ERROR"; }
-}
+        </div>`;setTimeout(scrollToEnd,50);try{if(wasInNoteMode){let notes=JSON.parse(localStorage.getItem('ai_notes')||"[]");const ts=new Date().toLocaleString('pt-PT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});notes.push({content:text,date:ts});localStorage.setItem('ai_notes',JSON.stringify(notes));const bubble=document.getElementById(tempId).querySelector('.ai-msg');bubble.className="ai-msg note-style";bubble.innerHTML=`
+        <div class="note-header">
+            <span>📝 Note Saved</span>
+            <span style="opacity: 0.6; font-family: monospace;">${ ts }</span>
+        </div>
+        <div style="color: #e6d5c3; font-size: 1.15rem; white-space: pre-wrap;">${ text }</div>
+    `;isGenerating=false;scrollToEnd();return}let formData=`prompt=${encodeURIComponent(text)}&model=${encodeURIComponent(selectedModel)}`;if(currentUuid){formData+=`&uuid=${encodeURIComponent(currentUuid)}`}if(forcedTool){formData+=`&tool=${ forcedTool }`}else if(wasInCalendarMode){formData+=`&tool=calendar`}else if(isCinemaMode&&!wasInNoteMode&&!wasInCalendarMode){formData+=`&tool=cinema`}if(wasInCalendarMode){formData+=`&tool=calendar`}else if(isCinemaMode&&!wasInNoteMode){formData+=`&tool=cinema`}const response=await fetch('http://bit-assistant.webhop.me/qwe123e1/chat.php',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData});const data=await response.json();if(data.uuid){currentUuid=data.uuid}const messageRow=document.getElementById(tempId);const bubble=messageRow.querySelector('.ai-msg');const avatar=messageRow.querySelector('.avatar-img');if(data.response){if(wasInCalendarMode){const savedDate=saveEventToLocal(data.response);if(savedDate){const eventMatch=data.response.match(/\[EVENT\]\s+(.*?)(?:\n|$)/);const noteMatch=data.response.match(/\[NOTE\]\s+(.*)/);bubble.innerHTML=`
+                        <div class="w-full">
+                            <div class="mb-3 p-3 bg-green-500/10 border-l-4 border-green-500 rounded-r shadow-sm text-left">
+                                <div class="text-[10px] uppercase tracking-wider text-green-400 font-bold mb-1">✓ Reminder Scheduled</div>
+                                <div class="text-sm text-white font-medium">${eventMatch?eventMatch[1]:"New Event"}</div>
+                                <div class="text-xs text-gray-400 mt-1 italic">"${noteMatch?noteMatch[1]:"No note"}"</div>
+                            </div>
+                            ${renderCalendarUI()}
+                        </div>`}else{bubble.innerHTML=`<div class="w-full p-3 bg-red-500/10 border-l-4 border-red-500 rounded-r text-left"><div class="text-[10px] uppercase tracking-wider text-red-500 font-bold mb-1">⚠️ Calendar Error</div><div class="text-sm text-white">The system couldn't parse the date.</div></div>`}}else{let cleanResponse=data.response;if(cleanResponse.includes('[F]')){cleanResponse=cleanResponse.replace('[F]','').trim();const furiousImg=selectedModel.includes('model1')?'https://i.postimg.cc/QVyJZ0N7/model1-f.png':'https://i.postimg.cc/Z0MxzVYj/model2-f.png';if(furiousTimer){clearTimeout(furiousTimer)}avatar.src=furiousImg;avatar.classList.add('furious-mode');furiousTimer=setTimeout(()=>{avatar.src=selectedModel;avatar.classList.remove('furious-mode');furiousTimer=null},2000)}bubble.innerHTML=`<div class="markdown-body text-sm w-full">${marked.parse(cleanResponse)}</div>`;attachCopyButtons(bubble)}}}catch(e){console.error("Fetch Error:",e);const errorBubble=document.getElementById(tempId)?.querySelector('.ai-msg');if(errorBubble){errorBubble.innerHTML=`<span class="text-red-500 text-xs">Connection failed.</span>`}}finally{isGenerating=false;stickyInput.focus();setTimeout(scrollToEnd,100)}}const handleChatInput=(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();const text=e.target.value.trim();if(!text||isGenerating){return}sendMessage(text);e.target.value=''}};userInput.addEventListener('keydown',handleChatInput);stickyInput.addEventListener('keydown',handleChatInput);shareBtn.onclick=shareConversation;window.addEventListener('DOMContentLoaded',async()=>{sidebarContainer.classList.remove('hidden');userInput.focus();const toolsBtn=document.getElementById('tools-btn');const toolsMenu=document.getElementById('tools-menu');const calendarBtn=document.getElementById('calendar-btn')||document.querySelector('#tools-menu button');if(toolsBtn&&toolsMenu){toolsBtn.onclick=(e)=>{e.stopPropagation();toolsMenu.classList.toggle('hidden')};document.addEventListener('click',()=>toolsMenu.classList.add('hidden'))}if(calendarBtn){calendarBtn.onclick=(e)=>{e.stopPropagation();toggleCalendarUI();toolsMenu.classList.add('hidden')}}const urlParams=new URLSearchParams(window.location.search);const shareId=urlParams.get('id');if(shareId){try{const response=await fetch(`http://bit-assistant.webhop.me/qwe123e1/shares/${ shareId }.json`);const data=await response.json();if(data.html){currentUuid=data.uuid;landing.classList.add('hidden');chatContainer.classList.remove('hidden');bottomBar.classList.remove('hidden');document.getElementById('share-corner-new').classList.remove('hidden');messages.innerHTML=data.html;attachCopyButtons(messages);stickyInput.focus();setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),100)}}catch(e){console.error(e)}}});async function shareConversation(){if(!messages.innerHTML.trim()){return}const originalText=shareBtn.innerHTML;shareBtn.innerText="SAVING...";const base64Html=btoa(unescape(encodeURIComponent(messages.innerHTML)));try{const response=await fetch('http://bit-assistant.webhop.me/qwe123e1/save_share.php',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:`content=${encodeURIComponent(base64Html)}&uuid=${encodeURIComponent(currentUuid)}`});const data=await response.json();if(data.url){const fullUrl=window.location.origin+window.location.pathname+"?id="+data.url;await navigator.clipboard.writeText(fullUrl);shareBtn.innerText="LINK COPIED!";setTimeout(()=>{shareBtn.innerHTML=originalText},3000)}}catch(e){shareBtn.innerText="SAVE ERROR"}}function renderCalendarUI(){const events=JSON.parse(localStorage.getItem('ai_events')||"[]");if(events.length===0){return `<div class="p-4 bg-gray-900 rounded-lg border border-red-500/30 text-center text-xs text-gray-400">
+                    No events found in storage.
+                </div>`}const monthYears=[...new Set(events.map(e=>{const parts=e.time.split(' ')[0].split('-');return `${parts[2]}-${parts[1]}`}))].sort();let finalHtml=`<div class="flex flex-col gap-6 w-full">`;monthYears.forEach(my=>{const[year,month]=my.split('-').map(Number);const monthIndex=month-1;const monthNames=["January","February","March","April","May","June","July","August","September","October","November","December"];const firstDay=new Date(year,monthIndex,1).getDay();const daysInMonth=new Date(year,monthIndex+1,0).getDate();finalHtml+=`
+        <div class="p-2 bg-gray-900 rounded-lg border border-white/10 w-full max-w-sm mx-auto shadow-xl">
+            <div class="text-center font-bold mb-2 text-green-400 border-b border-white/10 pb-2 uppercase tracking-widest text-[11px]">
+                ${monthNames[monthIndex]} ${ year }
+            </div>
+            <div class="grid grid-cols-7 gap-1 text-center text-[9px] text-gray-500 mb-1 font-bold">
+                <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+            </div>
+            <div class="grid grid-cols-7 gap-1">`;for(let i=0;i<firstDay;i+=1){finalHtml+=`<div class="h-8"></div>`}for(let d=1;d<=daysInMonth;d+=1){const dateStr=`${String(d).padStart(2,'0')}-${String(month).padStart(2,'0')}-${ year }`;const dayEvents=events.filter(e=>e.time.startsWith(dateStr));let style="text-gray-500 bg-white/5";let tooltip="No note created for this event";if(dayEvents.length>0){style="bg-green-600 text-white font-bold cursor-help ring-2 ring-green-400 ring-offset-2 ring-offset-gray-900";tooltip=dayEvents.map(e=>{const hourPart=e.time.split(' ')[1].substring(0,5);return `• ${ hourPart } | ${e.note }`}).join('<br>')}finalHtml+=`
+                <div class="h-8 flex items-center justify-center rounded text-xs relative group ${ style }">
+                    ${ d }
+                    <div class="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-40 bg-black text-white text-[10px] p-2 rounded shadow-2xl z-[100] border border-white/20 pointer-events-none">
+                        ${ tooltip }
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-black"></div>
+                    </div>
+                </div>`}finalHtml+=`</div></div>`});finalHtml+=`</div>`;return finalHtml}document.getElementById('notes-btn').onclick=()=>{toggleNoteMode();document.getElementById('tools-menu').classList.add('hidden')};const gamesBtn=document.getElementById('games-btn');if(gamesBtn){gamesBtn.onclick=(e)=>{e.stopPropagation();renderGamesGrid();document.getElementById('tools-menu').classList.add('hidden')}}function renderGamesGrid(){const tempId='games-'+Date.now();const gameData=[{img:"https://i.postimg.cc/xqgysrT1/9.png",src:"https://playpager.com/embed/chess/index.html"},{img:"https://i.postimg.cc/4nXQb4ZX/8.png",src:"https://playpager.com/embed/cubes/index.html"},{img:"https://i.postimg.cc/VJpfYhG1/5.png",src:"https://gameassist.rf.gd/g.php?g=5"},{img:"https://i.postimg.cc/B8FqtCkQ/2.png",src:"https://gameassist.rf.gd/g.php?g=2"},{img:"https://i.postimg.cc/WDZ2t7C4/4.png",src:"https://gameassist.rf.gd/g.php?g=4"},{img:"https://i.postimg.cc/75dHxRBB/1.png",src:"https://gameassist.rf.gd/g.php?g=1"},{img:"https://i.postimg.cc/TybRhcFL/3.png",src:"https://gameassist.rf.gd/g.php?g=3"},{img:"https://i.postimg.cc/dhpsqfHK/6.png",src:"https://gameassist.rf.gd/g.php?g=6"},{img:"https://i.postimg.cc/Z0mV7FPn/7.png",src:"https://gameassist.rf.gd/g.php?g=7"}];let gridHtml=`<div id="${ tempId }" class="grid grid-cols-3 gap-2 w-full p-2 bg-black/20 rounded-lg border border-white/10">`;gameData.forEach((game)=>{gridHtml+=`
+            <div class="cursor-pointer hover:scale-105 transition-transform overflow-hidden rounded-md border border-white/10" 
+                 onclick="launchGame('${ tempId }', '${game.src }')">
+                <img src="${game.img }" 
+                     class="w-full aspect-video object-cover block">
+            </div>`});gridHtml+=`</div>`;messages.innerHTML+=`
+        <div class="flex items-start space-x-3 w-full mb-4">
+            <img src="${modelSelect.value }" class="w-10 h-10 rounded-full shadow-md flex-shrink-0">
+            <div class="ai-msg flex flex-col w-full overflow-hidden" style="padding: 4px !important; background: #2a2a2e;">
+                ${ gridHtml }
+            </div>
+        </div>`;scrollToEnd()}let lastGameGridHtml="";window.launchGame=function(containerId,iframeSrc){const container=document.getElementById(containerId);if(container){lastGameGridHtml=container.innerHTML;container.classList.remove('grid','grid-cols-3');container.innerHTML=`
+            <div class="w-full flex flex-col items-center animate-fadeIn">
+                <iframe style="width: 100%; height: 550px; border: none; border-radius: 4px; background: #000;" 
+                        src="${ iframeSrc }" 
+                        scrolling="no"
+                        allowfullscreen>
+                </iframe>
+                <div class="w-full flex justify-start mt-2 px-1">
+                    <button onclick="restoreGameGrid('${ containerId }')" class="text-[10px] text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                        <span>←</span> Back to Games
+                    </button>
+                </div>
+            </div>`;scrollToEnd()}};window.restoreGameGrid=function(containerId){const container=document.getElementById(containerId);if(container&&lastGameGridHtml){container.classList.add('grid','grid-cols-3');container.innerHTML=lastGameGridHtml}};
