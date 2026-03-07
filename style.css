@@ -7,7 +7,6 @@ html, body {
     color: #dbdee1;
     scroll-behavior: smooth;
 }
-
 #landing {
     display: flex;
     flex-direction: column;
@@ -16,9 +15,7 @@ html, body {
     min-height: 100vh;
     width: 100%;
 }
-
 .hidden { display: none !important; }
-
 .input-box { 
     background-color: #383a40; 
     border: none; 
@@ -26,21 +23,18 @@ html, body {
     color: white; 
     font-size: 1.15rem; 
 }
-
 #chat-container {
     margin: 0 auto;
     width: 100%;
     max-width: 56rem; 
     padding-top: 5rem;
 }
-
 #messages {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     padding-bottom: 150px;
 }
-
 .user-msg { 
     background: #404249; 
     align-self: flex-end; 
@@ -51,7 +45,6 @@ html, body {
     font-size: 1.15rem; 
     line-height: 1.6;
 }
-
 .ai-msg { 
     background: #2b2d31; 
     border-radius: 0 15px 15px 15px; 
@@ -61,7 +54,6 @@ html, body {
     font-size: 1.15rem; 
     line-height: 1.6;
 }
-
 pre {
     position: relative;
     background: #1e1e1e !important;
@@ -73,7 +65,6 @@ pre {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     font-size: 1rem;
 }
-
 .copy-btn {
     position: absolute;
     top: 8px;
@@ -86,8 +77,6 @@ pre {
     cursor: pointer;
     font-size: 11px;
 }
-
-/* Animations */
 .dot-flashing {
     position: relative; width: 7px; height: 7px; border-radius: 5px;
     background-color: #b5bac1; color: #b5bac1;
@@ -104,7 +93,6 @@ pre {
 .dot-flashing::after { left: 12px; animation-delay: 0.5s; }
 @keyframes dot-flashing { 0% { background-color: #b5bac1; } 50%, 100% { background-color: #4e5058; } }
 
-/* Sidebar & Ads */
 #sidebar-container { 
     position: fixed; 
     bottom: 100px; 
@@ -114,7 +102,6 @@ pre {
     flex-direction: column;
     gap: 15px;
 }
-
 #right-ad-container {
     position: fixed;
     bottom: 100px;
@@ -122,7 +109,6 @@ pre {
     z-index: 1000;
     max-width: 180px;
 }
-
 .ad-wrapper, .ad-wrapper-transparent {
     position: relative;
     background-color: #313338; 
@@ -131,7 +117,6 @@ pre {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     border: 1px solid rgba(255, 255, 255, 0.05); 
 }
-
 .ad-close-btn, #right-ad-container button {
     position: absolute;
     background: #ef4444;
@@ -191,4 +176,116 @@ pre {
 
 .markdown-body a:hover {
     text-decoration: underline;
+}
+textarea.input-box {
+	resize: none;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	line-height: 1.5;
+}
+
+/* Glassmorphism Styles */
+.glass-btn {
+	background: rgba(45, 45, 45, 0.7);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: white;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+.glass-btn:hover {
+	background: rgba(60, 60, 60, 0.8);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.glass-panel {
+	background: rgba(30, 30, 30, 0.85);
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(15px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: white;
+}
+.ai-msg {
+    overflow: visible !important; 
+}
+.group:hover .hidden {
+    display: block !important;
+}
+.ai-msg.tool-container {
+    padding: 0 !important;
+    background: transparent !important;
+    max-width: 100%;
+}
+.ai-msg.note-style {
+    background: #3d2b1f !important; 
+    border-left: 4px solid #a17a5a !important;
+    padding: 12px 16px !important; 
+    width: fit-content !important;
+    min-width: 150px;
+    display: block !important;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(161, 122, 90, 0.3);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    color: #a17a5a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.invisible-container {
+    background: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+}
+.notes-wrapper {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important; 
+    width: 100%;
+}
+
+.note-card {
+    background: #3d2b1f !important;
+    border-left: 3px solid #a17a5a !important;
+    padding: 12px 16px !important;
+    border-radius: 4px 12px 12px 4px;
+    width: fit-content !important;
+    min-width: 120px;
+    max-width: 100%;
+    text-align: left !important; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.markdown-body a[target="_blank"] {
+    display: block;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    color: #60a5fa; 
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.markdown-body a[target="_blank"]:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #60a5fa;
+    transform: translateX(5px);
+}
+#chat-window {
+    overflow-y: auto;
+    overflow-anchor: auto !important; 
 }
