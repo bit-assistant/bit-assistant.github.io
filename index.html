@@ -23,8 +23,10 @@
     <div id="landing">
         <div class="w-full max-w-2xl px-4 text-center">
             <img id="model-img" src="https://i.postimg.cc/gXYVzhRt/model1.png" class="mx-auto mb-6 w-32 h-32 rounded-full shadow-lg object-cover">
-            <input type="text" id="user-input" placeholder="Ask me anything..." 
-                   class="input-box w-full p-6 rounded-xl text-lg shadow-2xl focus:ring-2 focus:ring-indigo-500 mb-4">
+            <textarea id="user-input" placeholder="Ask me anything..." 
+                      spellcheck="true" autocorrect="on" autocapitalize="sentences"
+                      class="input-box w-full p-6 rounded-xl text-lg shadow-2xl focus:ring-2 focus:ring-indigo-500 mb-4 h-20"></textarea>
+
             <select id="model-select" onchange="updateImage()" class="input-box p-2 rounded cursor-pointer mx-auto block">
                 <option value="https://i.postimg.cc/gXYVzhRt/model1.png">Aiko</option>
                 <option value="https://i.postimg.cc/ZBT8bN3f/model2.png">Martin</option>
@@ -38,9 +40,12 @@
 
     <div id="bottom-bar" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-[#313338]">
         <div class="max-w-4xl mx-auto">
-            <input type="text" id="sticky-input" placeholder="Type a message..." class="input-box w-full p-4 rounded-lg shadow-xl">
+            <textarea id="sticky-input" placeholder="Type a message..." 
+                      spellcheck="true" autocorrect="on" autocapitalize="sentences"
+                      class="input-box w-full p-4 rounded-lg shadow-xl h-16"></textarea>
         </div>
     </div>
+
     <div id="sidebar-container" class="hidden">
         <div class="ad-wrapper">
             <button onclick="this.parentElement.style.display='none'" class="ad-close-btn">&times;</button>
@@ -51,24 +56,69 @@
         </div>
         
         <div id="share-corner-new" class="hidden mt-4">
-            <button id="share-link" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-all">
+            <button id="share-link" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-all w-full justify-center">
                 <span>SHARE CONVERSATION</span>
             </button>
         </div>
-    </div>
-    <script src="script.js"></script>
-    <script type="text/javascript"> var infolinks_pid = 3443978; var infolinks_wsid = 0; </script> <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
-	<div id="right-ad-container" class="fixed right-5 bottom-[100px] z-[1000] flex flex-col items-end">
-		<div class="ad-wrapper-transparent relative">
-			<button onclick="this.parentElement.style.display='none'" 
-					class="absolute -top-3 -left-3 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-lg hover:bg-red-500 z-[10001]">
-				&times;
-			</button>
-			
-			<script async="async" data-cfasync="false" src="https://pl28852722.effectivegatecpm.com/92dd370edd32c05bccd71e2130c96f71/invoke.js"></script>
-			<div id="container-92dd370edd32c05bccd71e2130c96f71"></div>
-		</div>
-	</div>
 
+        <div id="tools-corner" class="hidden mt-2 relative">
+            <button id="tools-btn" class="glass-btn text-xs px-4 py-2 rounded-full flex items-center gap-2 transition-all w-full justify-center">
+                <span>TOOLS</span>
+            </button>
+        <div id="tools-menu" class="hidden absolute bottom-full mb-2 left-0 w-[160px] glass-panel rounded-xl shadow-2xl z-[99999] overflow-hidden">
+        <button id="games-btn" class="flex items-center space-x-2 w-full p-2 hover:bg-white/10 rounded transition-colors">
+            🎮 Games
+        </button>
+        <button id="news-btn" class="flex items-center space-x-3 w-full p-3 hover:bg-white/10 transition-colors text-white text-sm">
+        📰 News
+        </button>            
+            <button id="cinema-btn" class="w-full text-left px-4 py-2 text-xs font-bold text-gray-300 hover:bg-green-600/20 hover:text-green-400 transition-colors flex items-center gap-2">
+                🍿 Cinema
+            </button>
+            <button id="calendar-btn" class="w-full p-3 text-left text-xs hover:bg-white/10 transition-colors border-b border-white/5">
+                📅 Calendar
+            </button>
+            <button id="notes-btn" class="w-full p-3 text-left text-xs hover:bg-white/10 transition-colors border-b border-white/5">
+                📝 Notes
+            </button>
+        </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="text/javascript"> var infolinks_pid = 3443978; var infolinks_wsid = 0; </script> 
+    <script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
+
+    <div id="right-ad-container" class="fixed right-5 bottom-[100px] z-[1000] flex flex-col items-end">
+        <div class="ad-wrapper-transparent relative">
+            <button onclick="this.parentElement.style.display='none'" 
+                    class="absolute -top-3 -left-3 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-lg hover:bg-red-500 z-[10001]">
+                &times;
+            </button>
+            <script async="async" data-cfasync="false" src="https://pl28852722.effectivegatecpm.com/92dd370edd32c05bccd71e2130c96f71/invoke.js"></script>
+            <div id="container-92dd370edd32c05bccd71e2130c96f71"></div>
+        </div>
+    </div>
+    <div class="fixed bottom-4 right-4 z-[9999] group">
+        <div class="absolute bottom-full right-0 mb-3 w-64 p-4 bg-[#1e1e22] border border-white/10 rounded-xl shadow-2xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+            <h3 class="text-green-500 font-black text-xs uppercase tracking-widest mb-2">Wtf?</h3>
+            <ul class="text-[11px] text-gray-300 space-y-2 leading-relaxed">
+                <b class="text-white">Tools</b>
+                <li>• <b class="text-white">Calendar:</b> Schedule events in a calendar, you will receive visual and audio notifications when the time comes.<br><b>Usage eg.</b><br> <b>Schedule an event:</b> <i>Remember me to walk the dog in 10 minutes</i> <b>or</b> <i>Go to the psychiatric tomorrow at 11 am</i><br><b>To delete events type:</b> <i>delete 02-03-2026</i><br><b>To delete all events type:</b> <i>delete all</i><br><b>To show your calendar type:</b> <i>show</i></li>
+                <li>• <b class="text-white">Notes:</b> Save thoughts into your notes.<br><b>Usage eg.</b><br> <b>Type a note:</b> <i>Touch grass more often</i><br><b>To delete notes type:</b> <i>delete note 1</i><br><b>To delete all notes type:</b> <i>delete all</i><br><b>To show your notes type:</b> <i>show</i></li>
+                <li>• <b class="text-white">Cinema:</b> Search and chat about movies, if you say something like "I want to watch movie xyz" the assistant may send you a third party link to watch the movie.</li>
+                <br><br><b class="text-white">All your calendar and notes shit, live in your browser and are not stored anywhere else, unless, you press "share conversation", in that case whatever you have in your chat window will be saved in the server.</b>
+            </ul>
+            <div class="mt-3 pt-2 border-t border-white/5 text-[10px] text-gray-500 italic">
+                v1.0
+            </div>
+            <div class="absolute top-full right-4 border-8 border-transparent border-t-[#1e1e22]"></div>
+        </div>
+
+        <button class="w-10 h-10 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-all shadow-lg backdrop-blur-md">
+            <span class="font-black text-lg">?</span>
+        </button>
+    </div>
+    <img width="1" height="1" src="https://mapmyvisitors.com/map.png?d=FCO96Nir6EqvxZr3nx967S4mLvlAcb-Ay0zZS4wcv7s&cl=ffffff">
 </body>
 </html>
